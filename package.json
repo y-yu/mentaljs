@@ -1,0 +1,32 @@
+{
+  "name": "mentaljs",
+  "version": "1.0.0",
+  "description": "Mental Poker Library",
+  "main": "lib/mental.js",
+  "scripts": {
+    "init": "cd node_modules/sjcl/ && ./configure --without-all --with-ecc && make core.js && cp core.js sjcl.js",
+    "build": "npm run init && browserify lib/mental.js | uglifyjs > dist/mental.js",
+    "test": "mocha test/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/y-yu/mentaljs.git"
+  },
+  "author": "Yuu YOSHIMURA",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/y-yu/mentaljs/issues"
+  },
+  "homepage": "https://github.com/y-yu/mentaljs#readme",
+  "dependencies": {
+    "bottlejs": "^1.5.0",
+    "simplewebrtc": "^2.2.0",
+    "sinon": "^1.17.6",
+    "sjcl": "^1.0.6"
+  },
+  "devDependencies": {
+    "browserify": "^13.1.1",
+    "mocha": "^3.1.2",
+    "uglify-js": "^2.7.4"
+  }
+}
