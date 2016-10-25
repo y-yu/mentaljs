@@ -1,6 +1,6 @@
-var assert = require('assert');
+var assert = require("assert");
 var Crypto = require("../lib/crypto.js");
-var sjcl = require('sjcl');
+var sjcl = require("sjcl");
 
 describe("Crypto", function () {
     var sut = new Crypto();
