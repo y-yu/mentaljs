@@ -5,7 +5,8 @@
   "main": "lib/mental.js",
   "scripts": {
     "init": "cd node_modules/sjcl/ && ./configure --without-all --with-ecc && make core.js && cp core.js sjcl.js",
-    "build": "npm run init && browserify lib/mental.js | uglifyjs > dist/mental.js",
+    "build": "npm run init && browserify lib/mentaljs.js | uglifyjs > dist/mentaljs.js",
+    "build-demo": "npm run init && browserify demo/demo.js > dist/demo.js",
     "test": "mocha test/*"
   },
   "repository": {
