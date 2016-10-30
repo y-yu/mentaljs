@@ -5,7 +5,7 @@
   "main": "lib/mental.js",
   "scripts": {
     "init": "cd node_modules/sjcl/ && ./configure --without-all --with-ecc && make core.js && cp core.js sjcl.js",
-    "build": "npm run init && browserify lib/mentaljs.js | uglifyjs > dist/mentaljs.js",
+    "build": "npm run init && browserify lib/mental.js | uglifyjs > dist/mental.js",
     "build-demo": "npm run init && browserify demo/demo.js > dist/demo.js",
     "test": "mocha test/*"
   },
@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/y-yu/mentaljs#readme",
   "dependencies": {
+    "baconjs": "^0.7.88",
     "peerjs": "^0.3.14",
     "sjcl": "^1.0.6"
   },

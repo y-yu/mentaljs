@@ -1,3 +1,5 @@
+'use strict';
+
 var assert = require("assert");
 var Crypto = require("../lib/crypto.js");
 var sjcl = require("sjcl");

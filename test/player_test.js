@@ -1,3 +1,5 @@
+'use strict';
+
 var assert = require("assert");
 var player = require("../lib/player.js");
 
