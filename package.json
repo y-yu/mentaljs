@@ -5,8 +5,8 @@
   "main": "lib/mental.js",
   "scripts": {
     "init": "cd node_modules/sjcl/ && ./configure --without-all --with-ecc && make core.js && cp core.js sjcl.js",
-    "build": "npm run init && browserify lib/mental.js | uglifyjs > dist/mental.js",
-    "build-demo": "npm run init && browserify demo/demo.js > dist/demo.js",
+    "build": "npm run init && browserify lib/mental.js -t babelify | uglifyjs > dist/mental.js",
+    "build-demo": "npm run init && browserify demo/demo.js -t babelify > dist/demo.js",
     "test": "mocha test/*"
   },
   "repository": {
@@ -19,12 +19,24 @@
     "url": "https://github.com/y-yu/mentaljs/issues"
   },
   "homepage": "https://github.com/y-yu/mentaljs#readme",
+  "browserify": {
+    "extension": ["es6"],
+    "transform": [
+      [
+        "babelify",
+        {"presets": ["es2015"]}
+      ]
+    ]
+  },
   "dependencies": {
     "baconjs": "^0.7.88",
     "peerjs": "^0.3.14",
     "sjcl": "^1.0.6"
   },
   "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-latest": "^6.16.0",
+    "babelify": "^7.3.0",
     "browserify": "^13.1.1",
     "mocha": "^3.1.2",
     "uglify-js": "^2.7.4"
