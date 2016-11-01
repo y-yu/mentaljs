@@ -13,20 +13,20 @@ describe("RoomService", () => {
      */
     const setup = (fakePlayer) => {
         /**
-         * @constructor
+         * MockPlayerService
          */
-        const mockPlayerService = function () {
-            this.createPlayer = function () {
+        class MockPlayerService extends player.PlayerService {
+            createPlayer (id, key, isMe, conn) {
                 return fakePlayer;
             }
-        };
+        }
 
-        return new mockPlayerService();
+        return new MockPlayerService();
     };
 
     describe("#getNewId", () => {
        it("should return 1 if the number of players in the room is 1", () => {
-           const sut = room.RoomService(setup(dummyPlayer));
+           const sut = new room.RoomService(setup(dummyPlayer));
 
            const actual = sut.getNewId(dummyRoom);
            assert.equal(actual, 1);
@@ -35,14 +35,14 @@ describe("RoomService", () => {
 
     describe("#identify", () => {
         it("should identify the player that has the key", () => {
-            const sut = room.RoomService(setup(dummyPlayer));
+            const sut = new room.RoomService(setup(dummyPlayer));
 
             const actual = sut.identify(dummyRoom, "key");
             assert.deepEqual(actual, dummyPlayer);
         });
 
         it("should not identify any player if there is no player that has the key in the room", () => {
-            const sut = room.RoomService(setup(dummyPlayer));
+            const sut = new room.RoomService(setup(dummyPlayer));
 
             const actual = sut.identify(dummyRoom, "key that nobody do not have");
             assert.equal(actual, null);
@@ -51,7 +51,7 @@ describe("RoomService", () => {
 
     describe("#createRoomAsOwner", () => {
         it("should create a room", () => {
-            const sut = room.RoomService(setup(dummyPlayer));
+            const sut = new room.RoomService(setup(dummyPlayer));
 
             const actual = sut.createRoomAsOwner(dummyPlayer);
             assert.deepEqual(actual, new room.Room(dummyPlayer, dummyPlayer, [dummyPlayer]));
@@ -66,7 +66,7 @@ describe("RoomService", () => {
 
     describe("#addPlayer", () => {
         it("should add the player to the room", () => {
-            const sut = room.RoomService(setup(dummyPlayer));
+            const sut = new room.RoomService(setup(dummyPlayer));
             const p = new player.Player(1, "key", false);
 
             const actual = sut.addPlayer(dummyRoom, p);
@@ -80,7 +80,7 @@ describe("RoomService", () => {
         it("should add a new player that has the key to the room", () => {
             const key = "new player's key";
             const newPlayer = new player.Player(1, key, false, null);
-            const sut = room.RoomService(setup(newPlayer));
+            const sut = new room.RoomService(setup(newPlayer));
 
             const actual = sut.addNewPlayer(dummyRoom, key);
 

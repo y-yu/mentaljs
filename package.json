@@ -2,7 +2,7 @@
   "name": "mentaljs",
   "version": "1.0.0",
   "description": "Mental Poker Library",
-  "main": "lib/mental.js",
+  "main": "dist/mental.js",
   "scripts": {
     "init": "cd node_modules/sjcl/ && ./configure --without-all --with-ecc && make core.js && cp core.js sjcl.js",
     "build": "npm run init && browserify lib/mental.js -t babelify | uglifyjs > dist/mental.js",
@@ -20,11 +20,17 @@
   },
   "homepage": "https://github.com/y-yu/mentaljs#readme",
   "browserify": {
-    "extension": ["es6"],
+    "extension": [
+      "es6"
+    ],
     "transform": [
       [
         "babelify",
-        {"presets": ["es2015"]}
+        {
+          "presets": [
+            "es2015"
+          ]
+        }
       ]
     ]
   },

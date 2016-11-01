@@ -3,6 +3,7 @@
 const assert = require("assert");
 const Crypto = require("../lib/crypto.js");
 const sjcl = require("sjcl");
+const exception = require("../lib/exception.js");
 
 describe("Crypto", () => {
     const sut = new Crypto();
@@ -17,7 +18,7 @@ describe("Crypto", () => {
         });
 
         it("should return an exception if no curve that has the given name", () => {
-            assert.throws(() => { sut.getCurve("invalid") }, sut.exceptions.NoSuchCurve);
+            assert.throws(() => { sut.getCurve("invalid") }, exception.NoSuchCurve);
         });
     });
 
@@ -30,7 +31,7 @@ describe("Crypto", () => {
         });
 
         it("should throw an exception if the curve is not an instance of sjcl.ecc.curve", () => {
-            assert.throws(() => { sut.getGen("invalid") }, sut.exceptions.InvalidCurve);
+            assert.throws(() => { sut.getGen("invalid") }, exception.InvalidCurve);
         });
     });
 
@@ -43,7 +44,7 @@ describe("Crypto", () => {
         });
 
         it("should throw an exception if the curve is not an instance of sjcl.ecc.curve", () => {
-            assert.throws(() => { sut.getRandom("invalid") }, sut.exceptions.InvalidCurve);
+            assert.throws(() => { sut.getRandom("invalid") }, exception.InvalidCurve);
         });
     });
 
@@ -56,15 +57,15 @@ describe("Crypto", () => {
         });
 
         it("should throw an exception if the curve is not an instance of sjcl.ecc.curve", () => {
-            assert.throws(() => { sut.getPoint("invalid", 10, 10) }, sut.exceptions.InvalidCurve);
+            assert.throws(() => { sut.getPoint("invalid", 10, 10) }, exception.InvalidCurve);
         });
 
         it("should throw an exception if the curve is not an instance of sjcl.ecc.curve", () => {
             const c = sut.getCurve(curve);
 
-            assert.throws(() => { sut.getPoint(c, "invalid", 10) }, sut.exceptions.InvalidNumber);
-            assert.throws(() => { sut.getPoint(c, 10, "invalid") }, sut.exceptions.InvalidNumber);
-            assert.throws(() => { sut.getPoint(c, "invalid", "invalid") }, sut.exceptions.InvalidNumber);
+            assert.throws(() => { sut.getPoint(c, "invalid", 10) }, exception.InvalidNumber);
+            assert.throws(() => { sut.getPoint(c, 10, "invalid") }, exception.InvalidNumber);
+            assert.throws(() => { sut.getPoint(c, "invalid", "invalid") }, exception.InvalidNumber);
         });
     });
 
@@ -77,7 +78,7 @@ describe("Crypto", () => {
         });
 
         it("should throw an exception if the curve is not an instance of sjcl.ecc.curve", () => {
-            assert.throws(() => { sut.getRandomPoint("invalid") }, sut.exceptions.InvalidCurve);
+            assert.throws(() => { sut.getRandomPoint("invalid") }, exception.InvalidCurve);
         });
     });
 
@@ -90,7 +91,7 @@ describe("Crypto", () => {
         });
 
         it("should throw an exception if the curve is not an instance of sjcl.ecc.curve", () => {
-            assert.throws(() => { sut.getUnitPoint("invalid") }, sut.exceptions.InvalidCurve);
+            assert.throws(() => { sut.getUnitPoint("invalid") }, exception.InvalidCurve);
         });
     });
 
@@ -111,9 +112,9 @@ describe("Crypto", () => {
             const c = sut.getCurve(curve);
             const p = sut.getRandomPoint(c);
 
-            assert.throws(() => { sut.add("invalid", p); }, sut.exceptions.InvalidPoint);
-            assert.throws(() => { sut.add(p, "invalid"); }, sut.exceptions.InvalidPoint);
-            assert.throws(() => { sut.add("invalid", "invalid"); }, sut.exceptions.InvalidPoint);
+            assert.throws(() => { sut.add("invalid", p); }, exception.InvalidPoint);
+            assert.throws(() => { sut.add(p, "invalid"); }, exception.InvalidPoint);
+            assert.throws(() => { sut.add("invalid", "invalid"); }, exception.InvalidPoint);
         });
     });
 
@@ -170,7 +171,7 @@ describe("Crypto", () => {
         });
 
         it("should return an exception if the point is not instance of sjcl.ecc.point", () => {
-            assert.throws(() => { sut.inv("invalid"); }, sut.exceptions.InvalidPoint);
+            assert.throws(() => { sut.inv("invalid"); }, exception.InvalidPoint);
         })
     })
 });

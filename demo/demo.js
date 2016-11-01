@@ -1,5 +1,5 @@
-const constructor = require("../lib/mental.js");
-const mentaljs = constructor("enxnz2an1739dx6r", true);
+const Mentaljs = require("../lib/mental.js");
+const mentaljs = (new Mentaljs("enxnz2an1739dx6r", true)).core;
 
 const key = location.hash.slice(1);
 if (key === "") {
