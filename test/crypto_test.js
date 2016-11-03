@@ -1,9 +1,9 @@
 'use strict';
 
 const assert = require("assert");
-const Crypto = require("../lib/crypto.js");
+const Crypto = require("../lib/crypto");
 const sjcl = require("sjcl");
-const exception = require("../lib/exception.js");
+const exception = require("../lib/exception");
 
 describe("Crypto", () => {
     const sut = new Crypto();

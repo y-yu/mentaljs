@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require("assert");
-const player = require("../lib/player.js");
+const player = require("../lib/player");
 
 describe("PlayerService", () => {
     const sut = new player.PlayerService();

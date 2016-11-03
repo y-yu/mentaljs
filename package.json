@@ -7,6 +7,7 @@
     "init": "cd node_modules/sjcl/ && ./configure --without-all --with-ecc && make core.js && cp core.js sjcl.js",
     "build": "npm run init && browserify lib/mental.js -t babelify | uglifyjs > dist/mental.js",
     "build-demo": "npm run init && browserify demo/demo.js -t babelify > dist/demo.js",
+    "coverage": "istanbul cover _mocha -- -R spec",
     "test": "mocha test/*"
   },
   "repository": {
@@ -37,6 +38,7 @@
   "dependencies": {
     "baconjs": "^0.7.88",
     "peerjs": "^0.3.14",
+    "sinon": "^1.17.6",
     "sjcl": "^1.0.6"
   },
   "devDependencies": {
@@ -44,6 +46,7 @@
     "babel-preset-latest": "^6.16.0",
     "babelify": "^7.3.0",
     "browserify": "^13.1.1",
+    "istanbul": "^0.4.5",
     "mocha": "^3.1.2",
     "uglify-js": "^2.7.4"
   }
