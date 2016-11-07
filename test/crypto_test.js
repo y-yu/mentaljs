@@ -5,7 +5,7 @@ const Crypto = require("../lib/crypto");
 const sjcl = require("sjcl");
 const exception = require("../lib/exception");
 
-describe("Crypto", () => {
+describe("CryptoService", () => {
     const sut = new Crypto();
     const curve = "k256";
 
@@ -35,16 +35,16 @@ describe("Crypto", () => {
         });
     });
 
-    describe("#getRandom", () => {
+    describe("#getRandomNumber", () => {
         it("should return a value that is not undefined", () => {
             const c = sut.getCurve(curve);
 
-            const actual = sut.getRandom(c);
+            const actual = sut.getRandomNumber(c);
             assert(actual !== undefined);
         });
 
         it("should throw an exception if the curve is not an instance of sjcl.ecc.curve", () => {
-            assert.throws(() => { sut.getRandom("invalid") }, exception.InvalidCurve);
+            assert.throws(() => { sut.getRandomNumber("invalid") }, exception.InvalidCurve);
         });
     });
 
@@ -118,38 +118,38 @@ describe("Crypto", () => {
         });
     });
 
-    describe("#mul", () => {
+    describe("#multiply", () => {
         it("shuold return a value that is not undefined", () => {
             const c = sut.getCurve(curve);
             const p = sut.getRandomPoint(c);
 
-            assert(sut.mul(p, 5) !== undefined);
+            assert(sut.multiply(p, 5) !== undefined);
         });
 
         it("should multiply a value to point", () => {
             const c = sut.getCurve(curve);
             const p = sut.getRandomPoint(c);
 
-            const actual = sut.mul(p, 5);
+            const actual = sut.multiply(p, 5);
             assert.deepEqual(actual, p.mult(5));
         });
 
         it("should multiply a random value to point", () => {
             const c = sut.getCurve(curve);
             const p = sut.getRandomPoint(c);
-            const r = sut.getRandom(c);
+            const r = sut.getRandomNumber(c);
 
-            const actual = sut.mul(p, r);
+            const actual = sut.multiply(p, r);
             assert.deepEqual(actual, p.mult(r));
         });
     });
 
-    describe("#inv", () => {
+    describe("#inversePoint", () => {
         it("should return a value that is not undefined", () => {
             const c = sut.getCurve(curve);
             const p = sut.getRandomPoint(c);
 
-            const actual = sut.inv(p);
+            const actual = sut.inversePoint(p);
             assert(actual !== undefined);
         });
 
@@ -157,21 +157,84 @@ describe("Crypto", () => {
             const c = sut.getCurve(curve);
             const p = sut.getRandomPoint(c);
 
-            const actual = sut.inv(p);
+            const actual = sut.inversePoint(p);
             assert.deepEqual(actual, p.negate());
         });
 
         it("should return a unit as a point plus its inverse", () => {
             const c = sut.getCurve(curve);
             const p = sut.getPoint(c, 5, 10);
-            const pinv = sut.inv(p);
+            const pinv = sut.inversePoint(p);
 
             const actual = sut.add(p, pinv);
             assert.deepEqual(actual, sut.getUnitPoint(c));
         });
 
         it("should return an exception if the point is not instance of sjcl.ecc.point", () => {
-            assert.throws(() => { sut.inv("invalid"); }, exception.InvalidPoint);
+            assert.throws(() => { sut.inversePoint("invalid"); }, exception.InvalidPoint);
         })
-    })
+    });
+
+    describe("#inverseNumber", () => {
+        it("should return a value that is not undefined", () => {
+            const c = sut.getCurve(curve);
+
+            const actual = sut.inverseNumber(c, 5);
+            assert(actual !== undefined);
+        });
+
+        it("should return a value that equals 1 when it multiplies the input number", () => {
+            const c = sut.getCurve(curve);
+            const n = new sjcl.bn(5);
+
+            const actual = sut.inverseNumber(c, n);
+            assert.deepEqual(actual.mulmod(n, c.r), new sjcl.bn(1));
+        });
+
+        it("should return a value that equals point P that it multiplies tha aP", () => {
+            const c = sut.getCurve(curve);
+            const p = sut.getRandomPoint(c);
+            const a = new sjcl.bn(5);
+            const ap = sut.multiply(p, a);
+
+            const actual = sut.inverseNumber(c, a);
+            assert.deepEqual(sut.multiply(ap, actual).toBits(), p.toBits());
+        });
+
+        it("should return an exception if the input curve is not an instance of number nor sjcl.bn", () => {
+            assert.throws(() => { sut.inverseNumber("invalid", 5); }, exception.InvalidCurve);
+        });
+
+        it("should return an exception if the input number is not a numeber", () => {
+            const c = sut.getCurve(curve);
+
+            assert.throws(() => { sut.inverseNumber(c, "invaild"); }, exception.InvalidNumber);
+        });
+    });
+
+    describe("#equalsPoint", () => {
+        it("should return true if the inputs are the same", () => {
+            const c = sut.getCurve(curve);
+            const p = sut.getRandomPoint(c);
+
+            assert(sut.equalsPoint(p, p));
+        });
+
+        it("should return false if the inputs are not the same", () => {
+            const c = sut.getCurve(curve);
+            const p1 = sut.getPoint(c, 10, 5);
+            const p2 = sut.getPoint(c, 8, 6);
+
+            assert(!(sut.equalsPoint(p1, p2)));
+        });
+
+        it("should return an exception if the inputs are not instance of sjcl.ecc.point", () => {
+            const c = sut.getCurve(curve);
+            const p = sut.getRandomPoint(c);
+
+            assert.throws(() => { sut.equalsPoint("invalid", p); }, exception.InvalidPoint);
+            assert.throws(() => { sut.equalsPoint(p, "invalid"); }, exception.InvalidPoint);
+            assert.throws(() => { sut.equalsPoint("invalid", "invalid"); }, exception.InvalidPoint);
+        })
+    });
 });

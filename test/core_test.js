@@ -24,8 +24,8 @@ describe("Core", () => {
         const sut = new Core(stubWebRTC, stubCrypto, stubPlayerService, stubRoomService, new logger.FakeLogger());
 
         return [sut, {
-            webRTC: stubWebRTC,
-            crypto: stubCrypto,
+            webRTCService: stubWebRTC,
+            cryptoService: stubCrypto,
             playerService: stubPlayerService,
             roomService: stubRoomService,
         }];
@@ -39,7 +39,7 @@ describe("Core", () => {
             const owner = new player.Player(0, ownerKey, null);
             const expectedRoom = new room.Room(owner, owner, [owner]);
 
-            stubs.webRTC.peerOpen.withArgs().returns(Bacon.once(ownerKey));
+            stubs.webRTCService.peerOpen.withArgs().returns(Bacon.once(ownerKey));
             stubs.playerService.createPlayer.withArgs(0, ownerKey, null).returns(owner);
             stubs.roomService.createRoomAsOwner.withArgs(owner).returns(expectedRoom);
 
@@ -59,8 +59,8 @@ describe("Core", () => {
             const playerKey = "player key";
             const messageData = sut.messages.playerHello(playerKey).stringify();
 
-            stubs.webRTC.peerConnect.withArgs().returns(Bacon.once(stubDataConnection));
-            stubs.webRTC.connectionReceive.withArgs(stubDataConnection).returns(Bacon.once(messageData));
+            stubs.webRTCService.peerConnect.withArgs().returns(Bacon.once(stubDataConnection));
+            stubs.webRTCService.connectionReceive.withArgs(stubDataConnection).returns(Bacon.once(messageData));
 
             const expected = new message.ReceivedMessage(sut.messages.playerHello(playerKey), stubDataConnection);
             const actual = sut._makeMessageStream();
@@ -84,11 +84,11 @@ describe("Core", () => {
             const joinedPlayer = new player.Player(1, playerKey, stubDataConnection);
             const expectedRoom = new room.Room(owner, owner, [owner, joinedPlayer]);
 
-            stubs.webRTC.peerOpen.withArgs().returns(Bacon.once(ownerKey));
+            stubs.webRTCService.peerOpen.withArgs().returns(Bacon.once(ownerKey));
             stubs.playerService.createPlayer.withArgs(0, ownerKey, null).returns(owner);
             stubs.roomService.createRoomAsOwner.withArgs(owner).returns(presentRoom);
-            stubs.webRTC.peerConnect.withArgs().returns(Bacon.once(stubDataConnection));
-            stubs.webRTC.connectionReceive.withArgs(stubDataConnection).returns(Bacon.once(messageData));
+            stubs.webRTCService.peerConnect.withArgs().returns(Bacon.once(stubDataConnection));
+            stubs.webRTCService.connectionReceive.withArgs(stubDataConnection).returns(Bacon.once(messageData));
             stubs.roomService.addNewPlayer.withArgs(presentRoom, playerKey, stubDataConnection).returns(expectedRoom);
 
             const expectedMessage = new message.ReceivedMessage(sut.messages.playerHello(playerKey), stubDataConnection);
@@ -98,7 +98,7 @@ describe("Core", () => {
             actual.onValue(([m, r]) => {
                 assert.deepEqual(m, expectedMessage);
                 assert.deepEqual(r, expectedRoom);
-                assert(stubs.webRTC.send.withArgs(stubDataConnection, sut.messages.ownerHello(expectedRoom).stringify()).calledOnce);
+                assert(stubs.webRTCService.send.withArgs(stubDataConnection, sut.messages.ownerHello(expectedRoom).stringify()).calledOnce);
             });
         });
     });
@@ -117,10 +117,10 @@ describe("Core", () => {
             const expectedRoom = new room.Room(joinedPlayer, owner, [owner, joinedPlayer]);
             const receivedData = JSON.parse(ownerHello.stringify());
 
-            stubs.webRTC.peerOpen.withArgs().returns(Bacon.once(playerKey));
-            stubs.webRTC.connect.withArgs(ownerKey).returns(stubDataConnection);
-            stubs.webRTC.connectionOpen.withArgs(stubDataConnection).returns(Bacon.once(stubDataConnection));
-            stubs.webRTC.connectionReceive.withArgs(stubDataConnection).returns(Bacon.once(ownerHello.stringify()));
+            stubs.webRTCService.peerOpen.withArgs().returns(Bacon.once(playerKey));
+            stubs.webRTCService.connect.withArgs(ownerKey).returns(stubDataConnection);
+            stubs.webRTCService.connectionOpen.withArgs(stubDataConnection).returns(Bacon.once(stubDataConnection));
+            stubs.webRTCService.connectionReceive.withArgs(stubDataConnection).returns(Bacon.once(ownerHello.stringify()));
             stubs.roomService.createRoomAsCommon.withArgs(receivedData.body.players, stubDataConnection).returns(expectedRoom);
 
             const expectedMessage = new message.ReceivedMessage(receivedData, stubDataConnection);
@@ -129,7 +129,7 @@ describe("Core", () => {
             actual.onValue(([m, r]) => {
                 assert.deepEqual(m, expectedMessage);
                 assert.deepEqual(r, expectedRoom);
-                assert(stubs.webRTC.send.withArgs(stubDataConnection, sut.messages.playerHello(playerKey)))
+                assert(stubs.webRTCService.send.withArgs(stubDataConnection, sut.messages.playerHello(playerKey)))
             });
         });
     });
