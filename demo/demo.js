@@ -8,5 +8,6 @@ if (key === "") {
     messageRoomStream.log();
 } else {
     console.log(key);
-    mentaljs.joinRoom(key).log();
+    const messageRoomStream = mentaljs.joinRoom(key);
+    messageRoomStream.log();
 }

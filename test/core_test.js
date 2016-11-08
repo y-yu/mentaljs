@@ -116,7 +116,10 @@ describe("Core", () => {
             const joinedPlayer = new player.Player(1, playerKey, null);
             const expectedRoom = new room.Room(joinedPlayer, owner, [owner, joinedPlayer]);
             const receivedData = JSON.parse(ownerHello.stringify());
+            const messageData = sut.messages.playerHello(playerKey).stringify();
 
+            stubs.webRTCService.peerConnect.withArgs().returns(Bacon.once(stubDataConnection));
+            stubs.webRTCService.connectionReceive.withArgs(stubDataConnection).returns(Bacon.once(messageData));
             stubs.webRTCService.peerOpen.withArgs().returns(Bacon.once(playerKey));
             stubs.webRTCService.connect.withArgs(ownerKey).returns(stubDataConnection);
             stubs.webRTCService.connectionOpen.withArgs(stubDataConnection).returns(Bacon.once(stubDataConnection));
