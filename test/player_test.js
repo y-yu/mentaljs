@@ -10,12 +10,11 @@ describe("PlayerService", () => {
         it("should create a player", () => {
             const id = 0;
             const key = "key";
-            const isMe = true;
 
             // todo: use the fake connection
-            var actual = sut.createPlayer(id, key, isMe, null);
+            var actual = sut.createPlayer(id, key, null);
 
-            assert.deepEqual(actual, new player.Player(id, key, isMe, null));
+            assert.deepEqual(actual, new player.Player(id, key, null));
         })
     })
 });
