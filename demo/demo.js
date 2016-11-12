@@ -12,7 +12,6 @@ if (key === "") {
         room.players.forEach((p) => {
             $("#playerTableBody").append(
                 $("<tr>").append(
-                    $("<td>").text(p.id),
                     $("<td>").text(p.key)
                 )
             )
@@ -23,7 +22,6 @@ if (key === "") {
         $("#messageTableBody").append(
             $("<tr>").append(
                 $("<td>").text(receivedMessage.message.type),
-                $("<td>").text(receivedMessage.message.from),
                 $("<td>").text(JSON.stringify(receivedMessage.message.body))
             )
         )
@@ -37,7 +35,6 @@ if (key === "") {
         room.players.forEach((p) => {
             $("#playerTableBody").append(
                 $("<tr>").append(
-                    $("<td>").text(p.id),
                     $("<td>").text(p.key)
                 )
             )
@@ -48,7 +45,6 @@ if (key === "") {
         $("#messageTableBody").append(
             $("<tr>").append(
                 $("<td>").text(receivedMessage.message.type),
-                $("<td>").text(receivedMessage.message.from),
                 $("<td>").text(JSON.stringify(receivedMessage.message.body))
             )
         )
